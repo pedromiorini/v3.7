@@ -1,62 +1,53 @@
-"""
-DIWT v4.0: Replay Closed-Loop Session
-Loads the session recording and generates the results visualization.
-"""
-import json
+import json, time, os
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 
-def load_session_data(file_path='session_recording.json'):
-    """Loads the session data from a JSON file."""
+# Caminho para o arquivo de gravação
+FILE_PATH = "v4.0-closed-loop/session_recording.json"
+PLOT_PATH = "v4.0-closed-loop/closed_loop_simulation_results.png"
+
+def generate_plot(data):
+    """Gera o gráfico de resultados da simulação."""
+    cycles = [f['cycle'] for f in data]
+    phi_eeg = [f['phi_eeg'] for f in data]
+    phi_diwt = [f['phi_diwt'] for f in data]
+    
+    plt.figure(figsize=(10, 5))
+    plt.plot(cycles, phi_eeg, label="Φ EEG (Simulado)", linestyle='--')
+    plt.plot(cycles, phi_diwt, label="Φ DIWT (Regulado)", linewidth=2)
+    plt.title("DIWT Response to Neural Stress")
+    plt.xlabel("Cycle")
+    plt.ylabel("Phi Value")
+    plt.legend()
+    plt.savefig(PLOT_PATH, dpi=200)
+    plt.close()
+    print(f"\nGráfico de resultados salvo em {PLOT_PATH}")
+
+def replay():
+    """Reproduz a sessão no terminal e gera o gráfico."""
     try:
-        with open(file_path, 'r') as f:
-            return json.load(f)
+        with open(FILE_PATH) as f:
+            data = json.load(f)
     except FileNotFoundError:
-        print(f"Error: Session recording file not found at {file_path}")
-        print("Please run record_first_session.py first.")
-        return None
-
-def generate_results_plot(data):
-    """Generates the closed-loop simulation results plot."""
-    log = data.get('log', [])
-    if not log:
-        print("Error: No log data found in the session recording.")
+        print(f"Erro: Arquivo de gravação não encontrado em {FILE_PATH}")
+        print("Execute 'python record_first_session.py' primeiro.")
         return
 
-    cycles = [item['cycle'] for item in log]
-    phi_eeg = [item['phi_eeg'] for item in log]
-    phi_diwt = [item['phi_diwt'] for item in log]
-    interventions = [item['intervened'] for item in log]
-
-    interventions_x = [cycles[i] for i, val in enumerate(interventions) if val]
-    interventions_y = [phi_diwt[i] for i, val in enumerate(interventions) if val]
-
-    plt.figure(figsize=(12, 6))
-    plt.plot(cycles, phi_eeg, label='Neural Φ (EEG-derived)', color='#2E86AB', linestyle='--')
-    plt.plot(cycles, phi_diwt, label='DIWT Φ (Ethically Regulated)', color='#06A77D', linewidth=2)
-    plt.scatter(interventions_x, interventions_y, color='red', marker='o', s=50, label='Ethical Intervention')
-
-    plt.title('DIWT v4.0 Closed-Loop Simulation Results', fontsize=16, fontweight='bold')
-    plt.xlabel('Cycle (Time)', fontsize=12)
-    plt.ylabel('Integrated Information (Φ)', fontsize=12)
-    plt.legend()
-    plt.grid(alpha=0.3)
-    plt.tight_layout()
-
-    output_path = 'closed_loop_simulation_results.png'
-    plt.savefig(output_path, dpi=200)
-    plt.close()
-    print(f"\n✓ Results plot generated: {output_path}")
-
-def replay_session():
-    """Main function to replay the session."""
-    data = load_session_data()
-    if data:
-        print(f"Replaying session from {data['metadata']['date']}...")
-        print(f"Total cycles: {data['metadata']['cycles']}")
-        print(f"Total ethical interventions: {data['metadata']['total_interventions']}")
-        generate_results_plot(data)
+    print("--- DIWT v4.0 — REPLAY DA SESSÃO GRAVADA ---")
+    
+    # Replay no terminal
+    for frame in data:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("DIWT v4.0 — SESSÃO GRAVADA")
+        print(f"Cycle: {frame['cycle']:03d}")
+        print(f"Φ EEG:  {frame['phi_eeg']}")
+        print(f"Φ Pred: {frame['phi_pred']}")
+        print(f"Φ DIWT: {frame['phi_diwt']}")
+        print(f"Ação:   {frame['action']}")
+        time.sleep(0.05) # Tempo de espera reduzido para o sandbox
+    
+    # Geração do gráfico
+    generate_plot(data)
 
 if __name__ == "__main__":
-    replay_session()
+    replay()

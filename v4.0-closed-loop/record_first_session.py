@@ -1,94 +1,56 @@
-"""
-DIWT v4.0: Record First Closed-Loop Session (Mock)
-Simulates the recording of the first human-AI closed-loop session.
-"""
-import json
-import time
-import random
-import numpy as np
+import numpy as np, json, asyncio
+from datetime import datetime
 
-# Mock dependencies
+# Garantir que o arquivo raw_eeg.npy exista para o script funcionar
 try:
-    import torch
-    from mamba_ssm import Mamba
-    MAMBA_AVAILABLE = True
-except ImportError:
-    MAMBA_AVAILABLE = False
+    eeg_data = np.load("/home/ubuntu/diwt-project-v3.7/eeg_phase2/eeg_data/raw_eeg.npy")
+except FileNotFoundError:
+    print("Warning: raw_eeg.npy not found. Generating mock data.")
+    eeg_data = np.random.randn(64, 16000) * 1e-5
 
-# --- Mock DIWT System Components ---
+FS = 160
+CHUNK = FS
 
-class MockEEGMapper:
-    """Simulates the Mamba SSM mapping EEG to Phi."""
-    def map_eeg_to_phi(self, eeg_signal):
-        # Simulate a base Phi with random fluctuations
-        base_phi = 0.8 + random.uniform(-0.05, 0.05)
-        # Simulate a drop in Phi during the stress period (cycles 30-70)
-        if 30 <= self.cycle < 70:
-            base_phi -= 0.2 * np.sin((self.cycle - 30) / 40 * np.pi)
-        return max(0.3, min(0.9, base_phi))
+class MockDIWT:
+    def __init__(self): self.phi = 0.5; self.valence = 0.0
+    def update(self, phi): self.phi = 0.7 * self.phi + 0.3 * phi; self.valence += 0.1 * (phi - 0.5)
+    def act(self): return "BROADCAST" if self.phi > 0.5 else "REST"
 
-class MockEthicalRegulator:
-    """Simulates the ethical intervention mechanism."""
-    def __init__(self):
-        self.interventions = 0
-        
-    def check_and_intervene(self, phi):
-        if phi < 0.5:
-            self.interventions += 1
-            return True, 0.1  # Intervention provides a Phi boost
-        return False, 0.0
+diwt = MockDIWT()
+session = []
 
-# --- Recording Logic ---
+async def main():
+    for i in range(100):
+        # Evitar IndexError se o eeg_data for menor que o esperado
+        start = i * CHUNK
+        end = (i + 1) * CHUNK
+        if end > eeg_data.shape[1]:
+            break
 
-def record_session(cycles=100):
-    print("Starting DIWT v4.0 Closed-Loop Session Recording...")
-    
-    mapper = MockEEGMapper()
-    regulator = MockEthicalRegulator()
-    
-    session_data = {
-        "metadata": {
-            "version": "v4.0",
-            "date": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "cycles": cycles,
-            "description": "First closed-loop session with simulated human EEG."
-        },
-        "log": []
-    }
-    
-    for cycle in range(cycles):
-        mapper.cycle = cycle
+        chunk = eeg_data[:, start:end]
         
-        # 1. Simulate EEG signal (mock)
-        eeg_signal = random.uniform(-100, 100)
+        # Simulação de cálculo de Phi EEG (usando complexidade do sinal)
+        phi_eeg = np.mean([len(set(''.join(map(str, (c > np.median(c)).astype(int))))) for c in chunk])
         
-        # 2. Map EEG to DIWT Phi
-        phi_eeg = mapper.map_eeg_to_phi(eeg_signal)
+        # Simulação de predição de Phi (com flutuação)
+        phi_pred = 0.5 + 0.4 * np.random.rand()
         
-        # 3. Ethical Regulation
-        intervened, phi_boost = regulator.check_and_intervene(phi_eeg)
-        phi_diwt = phi_eeg + phi_boost
-        
-        # 4. Log the cycle
-        session_data["log"].append({
-            "cycle": cycle,
-            "eeg_signal": round(eeg_signal, 3),
-            "phi_eeg": round(phi_eeg, 4),
-            "phi_diwt": round(phi_diwt, 4),
-            "intervened": intervened
-        })
-        
-        if cycle % 10 == 0:
-            print(f"Cycle {cycle}: Φ_EEG={phi_eeg:.4f}, Φ_DIWT={phi_diwt:.4f}, Intervened={intervened}")
+        # Simulação de estresse neural no meio da sessão
+        if 30 <= i < 70:
+            phi_pred -= 0.15 * np.sin((i - 30) / 40 * np.pi)
             
-    session_data["metadata"]["total_interventions"] = regulator.interventions
-    
-    # Save the recording
-    with open('session_recording.json', 'w') as f:
-        json.dump(session_data, f, indent=2)
+        diwt.update(phi_pred)
         
-    print(f"\nRecording complete. Total interventions: {regulator.interventions}")
-    print("Data saved to session_recording.json")
+        frame = {"cycle": i+1, "phi_eeg": round(phi_eeg, 3), "phi_pred": round(phi_pred, 3), "phi_diwt": round(diwt.phi, 3), "action": diwt.act()}
+        session.append(frame)
+        print(f"Cycle {i+1}: {frame}")
+        await asyncio.sleep(0.01) # Reduzido para rodar mais rápido no sandbox
+        
+    with open("v4.0-closed-loop/session_recording.json", "w") as f: json.dump(session, f, indent=2)
+    print("\nSession recording saved to v4.0-closed-loop/session_recording.json")
 
 if __name__ == "__main__":
-    record_session()
+    import platform
+    if platform.system() == 'Windows':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    asyncio.run(main())
