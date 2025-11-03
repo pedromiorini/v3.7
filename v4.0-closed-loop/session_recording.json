@@ -1,0 +1,711 @@
+{
+  "metadata": {
+    "version": "v4.0",
+    "date": "2025-11-03 01:23:46",
+    "cycles": 100,
+    "description": "First closed-loop session with simulated human EEG.",
+    "total_interventions": 0
+  },
+  "log": [
+    {
+      "cycle": 0,
+      "eeg_signal": -3.673,
+      "phi_eeg": 0.7724,
+      "phi_diwt": 0.7724,
+      "intervened": false
+    },
+    {
+      "cycle": 1,
+      "eeg_signal": 41.826,
+      "phi_eeg": 0.8203,
+      "phi_diwt": 0.8203,
+      "intervened": false
+    },
+    {
+      "cycle": 2,
+      "eeg_signal": 79.396,
+      "phi_eeg": 0.8271,
+      "phi_diwt": 0.8271,
+      "intervened": false
+    },
+    {
+      "cycle": 3,
+      "eeg_signal": -82.841,
+      "phi_eeg": 0.8137,
+      "phi_diwt": 0.8137,
+      "intervened": false
+    },
+    {
+      "cycle": 4,
+      "eeg_signal": 45.524,
+      "phi_eeg": 0.8132,
+      "phi_diwt": 0.8132,
+      "intervened": false
+    },
+    {
+      "cycle": 5,
+      "eeg_signal": -5.776,
+      "phi_eeg": 0.8383,
+      "phi_diwt": 0.8383,
+      "intervened": false
+    },
+    {
+      "cycle": 6,
+      "eeg_signal": -79.866,
+      "phi_eeg": 0.83,
+      "phi_diwt": 0.83,
+      "intervened": false
+    },
+    {
+      "cycle": 7,
+      "eeg_signal": 82.716,
+      "phi_eeg": 0.7679,
+      "phi_diwt": 0.7679,
+      "intervened": false
+    },
+    {
+      "cycle": 8,
+      "eeg_signal": 68.473,
+      "phi_eeg": 0.8011,
+      "phi_diwt": 0.8011,
+      "intervened": false
+    },
+    {
+      "cycle": 9,
+      "eeg_signal": 8.318,
+      "phi_eeg": 0.8022,
+      "phi_diwt": 0.8022,
+      "intervened": false
+    },
+    {
+      "cycle": 10,
+      "eeg_signal": -97.656,
+      "phi_eeg": 0.7531,
+      "phi_diwt": 0.7531,
+      "intervened": false
+    },
+    {
+      "cycle": 11,
+      "eeg_signal": 48.047,
+      "phi_eeg": 0.834,
+      "phi_diwt": 0.834,
+      "intervened": false
+    },
+    {
+      "cycle": 12,
+      "eeg_signal": 83.416,
+      "phi_eeg": 0.7982,
+      "phi_diwt": 0.7982,
+      "intervened": false
+    },
+    {
+      "cycle": 13,
+      "eeg_signal": 61.351,
+      "phi_eeg": 0.8173,
+      "phi_diwt": 0.8173,
+      "intervened": false
+    },
+    {
+      "cycle": 14,
+      "eeg_signal": -81.856,
+      "phi_eeg": 0.7843,
+      "phi_diwt": 0.7843,
+      "intervened": false
+    },
+    {
+      "cycle": 15,
+      "eeg_signal": -20.071,
+      "phi_eeg": 0.7822,
+      "phi_diwt": 0.7822,
+      "intervened": false
+    },
+    {
+      "cycle": 16,
+      "eeg_signal": -65.726,
+      "phi_eeg": 0.7637,
+      "phi_diwt": 0.7637,
+      "intervened": false
+    },
+    {
+      "cycle": 17,
+      "eeg_signal": -35.936,
+      "phi_eeg": 0.8491,
+      "phi_diwt": 0.8491,
+      "intervened": false
+    },
+    {
+      "cycle": 18,
+      "eeg_signal": 38.84,
+      "phi_eeg": 0.8486,
+      "phi_diwt": 0.8486,
+      "intervened": false
+    },
+    {
+      "cycle": 19,
+      "eeg_signal": -54.962,
+      "phi_eeg": 0.782,
+      "phi_diwt": 0.782,
+      "intervened": false
+    },
+    {
+      "cycle": 20,
+      "eeg_signal": -96.639,
+      "phi_eeg": 0.8151,
+      "phi_diwt": 0.8151,
+      "intervened": false
+    },
+    {
+      "cycle": 21,
+      "eeg_signal": -4.509,
+      "phi_eeg": 0.7633,
+      "phi_diwt": 0.7633,
+      "intervened": false
+    },
+    {
+      "cycle": 22,
+      "eeg_signal": -86.164,
+      "phi_eeg": 0.8389,
+      "phi_diwt": 0.8389,
+      "intervened": false
+    },
+    {
+      "cycle": 23,
+      "eeg_signal": -61.434,
+      "phi_eeg": 0.7767,
+      "phi_diwt": 0.7767,
+      "intervened": false
+    },
+    {
+      "cycle": 24,
+      "eeg_signal": 80.259,
+      "phi_eeg": 0.8202,
+      "phi_diwt": 0.8202,
+      "intervened": false
+    },
+    {
+      "cycle": 25,
+      "eeg_signal": -3.239,
+      "phi_eeg": 0.8003,
+      "phi_diwt": 0.8003,
+      "intervened": false
+    },
+    {
+      "cycle": 26,
+      "eeg_signal": 74.179,
+      "phi_eeg": 0.8489,
+      "phi_diwt": 0.8489,
+      "intervened": false
+    },
+    {
+      "cycle": 27,
+      "eeg_signal": -96.756,
+      "phi_eeg": 0.7793,
+      "phi_diwt": 0.7793,
+      "intervened": false
+    },
+    {
+      "cycle": 28,
+      "eeg_signal": 76.486,
+      "phi_eeg": 0.8114,
+      "phi_diwt": 0.8114,
+      "intervened": false
+    },
+    {
+      "cycle": 29,
+      "eeg_signal": 89.416,
+      "phi_eeg": 0.8409,
+      "phi_diwt": 0.8409,
+      "intervened": false
+    },
+    {
+      "cycle": 30,
+      "eeg_signal": -95.822,
+      "phi_eeg": 0.8318,
+      "phi_diwt": 0.8318,
+      "intervened": false
+    },
+    {
+      "cycle": 31,
+      "eeg_signal": -26.792,
+      "phi_eeg": 0.7696,
+      "phi_diwt": 0.7696,
+      "intervened": false
+    },
+    {
+      "cycle": 32,
+      "eeg_signal": -63.426,
+      "phi_eeg": 0.7333,
+      "phi_diwt": 0.7333,
+      "intervened": false
+    },
+    {
+      "cycle": 33,
+      "eeg_signal": 68.946,
+      "phi_eeg": 0.8021,
+      "phi_diwt": 0.8021,
+      "intervened": false
+    },
+    {
+      "cycle": 34,
+      "eeg_signal": 93.727,
+      "phi_eeg": 0.7741,
+      "phi_diwt": 0.7741,
+      "intervened": false
+    },
+    {
+      "cycle": 35,
+      "eeg_signal": -25.211,
+      "phi_eeg": 0.7176,
+      "phi_diwt": 0.7176,
+      "intervened": false
+    },
+    {
+      "cycle": 36,
+      "eeg_signal": -17.322,
+      "phi_eeg": 0.7354,
+      "phi_diwt": 0.7354,
+      "intervened": false
+    },
+    {
+      "cycle": 37,
+      "eeg_signal": 25.243,
+      "phi_eeg": 0.6854,
+      "phi_diwt": 0.6854,
+      "intervened": false
+    },
+    {
+      "cycle": 38,
+      "eeg_signal": 37.481,
+      "phi_eeg": 0.6914,
+      "phi_diwt": 0.6914,
+      "intervened": false
+    },
+    {
+      "cycle": 39,
+      "eeg_signal": 0.314,
+      "phi_eeg": 0.7042,
+      "phi_diwt": 0.7042,
+      "intervened": false
+    },
+    {
+      "cycle": 40,
+      "eeg_signal": -31.059,
+      "phi_eeg": 0.6206,
+      "phi_diwt": 0.6206,
+      "intervened": false
+    },
+    {
+      "cycle": 41,
+      "eeg_signal": 38.334,
+      "phi_eeg": 0.6704,
+      "phi_diwt": 0.6704,
+      "intervened": false
+    },
+    {
+      "cycle": 42,
+      "eeg_signal": 10.005,
+      "phi_eeg": 0.647,
+      "phi_diwt": 0.647,
+      "intervened": false
+    },
+    {
+      "cycle": 43,
+      "eeg_signal": -53.985,
+      "phi_eeg": 0.6746,
+      "phi_diwt": 0.6746,
+      "intervened": false
+    },
+    {
+      "cycle": 44,
+      "eeg_signal": 79.737,
+      "phi_eeg": 0.5801,
+      "phi_diwt": 0.5801,
+      "intervened": false
+    },
+    {
+      "cycle": 45,
+      "eeg_signal": 58.042,
+      "phi_eeg": 0.6189,
+      "phi_diwt": 0.6189,
+      "intervened": false
+    },
+    {
+      "cycle": 46,
+      "eeg_signal": -59.515,
+      "phi_eeg": 0.5921,
+      "phi_diwt": 0.5921,
+      "intervened": false
+    },
+    {
+      "cycle": 47,
+      "eeg_signal": 4.593,
+      "phi_eeg": 0.6007,
+      "phi_diwt": 0.6007,
+      "intervened": false
+    },
+    {
+      "cycle": 48,
+      "eeg_signal": 46.809,
+      "phi_eeg": 0.6468,
+      "phi_diwt": 0.6468,
+      "intervened": false
+    },
+    {
+      "cycle": 49,
+      "eeg_signal": 1.327,
+      "phi_eeg": 0.5885,
+      "phi_diwt": 0.5885,
+      "intervened": false
+    },
+    {
+      "cycle": 50,
+      "eeg_signal": 87.169,
+      "phi_eeg": 0.6103,
+      "phi_diwt": 0.6103,
+      "intervened": false
+    },
+    {
+      "cycle": 51,
+      "eeg_signal": 80.06,
+      "phi_eeg": 0.5604,
+      "phi_diwt": 0.5604,
+      "intervened": false
+    },
+    {
+      "cycle": 52,
+      "eeg_signal": -57.69,
+      "phi_eeg": 0.6051,
+      "phi_diwt": 0.6051,
+      "intervened": false
+    },
+    {
+      "cycle": 53,
+      "eeg_signal": 68.367,
+      "phi_eeg": 0.6462,
+      "phi_diwt": 0.6462,
+      "intervened": false
+    },
+    {
+      "cycle": 54,
+      "eeg_signal": -54.123,
+      "phi_eeg": 0.6519,
+      "phi_diwt": 0.6519,
+      "intervened": false
+    },
+    {
+      "cycle": 55,
+      "eeg_signal": 21.334,
+      "phi_eeg": 0.5816,
+      "phi_diwt": 0.5816,
+      "intervened": false
+    },
+    {
+      "cycle": 56,
+      "eeg_signal": 34.344,
+      "phi_eeg": 0.5906,
+      "phi_diwt": 0.5906,
+      "intervened": false
+    },
+    {
+      "cycle": 57,
+      "eeg_signal": 68.265,
+      "phi_eeg": 0.6733,
+      "phi_diwt": 0.6733,
+      "intervened": false
+    },
+    {
+      "cycle": 58,
+      "eeg_signal": -80.559,
+      "phi_eeg": 0.6535,
+      "phi_diwt": 0.6535,
+      "intervened": false
+    },
+    {
+      "cycle": 59,
+      "eeg_signal": -51.323,
+      "phi_eeg": 0.6845,
+      "phi_diwt": 0.6845,
+      "intervened": false
+    },
+    {
+      "cycle": 60,
+      "eeg_signal": 87.144,
+      "phi_eeg": 0.6096,
+      "phi_diwt": 0.6096,
+      "intervened": false
+    },
+    {
+      "cycle": 61,
+      "eeg_signal": -85.099,
+      "phi_eeg": 0.6943,
+      "phi_diwt": 0.6943,
+      "intervened": false
+    },
+    {
+      "cycle": 62,
+      "eeg_signal": -70.484,
+      "phi_eeg": 0.6984,
+      "phi_diwt": 0.6984,
+      "intervened": false
+    },
+    {
+      "cycle": 63,
+      "eeg_signal": -46.435,
+      "phi_eeg": 0.6513,
+      "phi_diwt": 0.6513,
+      "intervened": false
+    },
+    {
+      "cycle": 64,
+      "eeg_signal": -76.238,
+      "phi_eeg": 0.6969,
+      "phi_diwt": 0.6969,
+      "intervened": false
+    },
+    {
+      "cycle": 65,
+      "eeg_signal": 85.864,
+      "phi_eeg": 0.7037,
+      "phi_diwt": 0.7037,
+      "intervened": false
+    },
+    {
+      "cycle": 66,
+      "eeg_signal": 83.741,
+      "phi_eeg": 0.7025,
+      "phi_diwt": 0.7025,
+      "intervened": false
+    },
+    {
+      "cycle": 67,
+      "eeg_signal": -0.155,
+      "phi_eeg": 0.7307,
+      "phi_diwt": 0.7307,
+      "intervened": false
+    },
+    {
+      "cycle": 68,
+      "eeg_signal": -70.497,
+      "phi_eeg": 0.7621,
+      "phi_diwt": 0.7621,
+      "intervened": false
+    },
+    {
+      "cycle": 69,
+      "eeg_signal": 61.282,
+      "phi_eeg": 0.7373,
+      "phi_diwt": 0.7373,
+      "intervened": false
+    },
+    {
+      "cycle": 70,
+      "eeg_signal": -85.354,
+      "phi_eeg": 0.7761,
+      "phi_diwt": 0.7761,
+      "intervened": false
+    },
+    {
+      "cycle": 71,
+      "eeg_signal": 77.873,
+      "phi_eeg": 0.7828,
+      "phi_diwt": 0.7828,
+      "intervened": false
+    },
+    {
+      "cycle": 72,
+      "eeg_signal": -30.188,
+      "phi_eeg": 0.8032,
+      "phi_diwt": 0.8032,
+      "intervened": false
+    },
+    {
+      "cycle": 73,
+      "eeg_signal": -87.864,
+      "phi_eeg": 0.7735,
+      "phi_diwt": 0.7735,
+      "intervened": false
+    },
+    {
+      "cycle": 74,
+      "eeg_signal": 56.707,
+      "phi_eeg": 0.7965,
+      "phi_diwt": 0.7965,
+      "intervened": false
+    },
+    {
+      "cycle": 75,
+      "eeg_signal": -33.856,
+      "phi_eeg": 0.7515,
+      "phi_diwt": 0.7515,
+      "intervened": false
+    },
+    {
+      "cycle": 76,
+      "eeg_signal": -47.452,
+      "phi_eeg": 0.8004,
+      "phi_diwt": 0.8004,
+      "intervened": false
+    },
+    {
+      "cycle": 77,
+      "eeg_signal": -54.549,
+      "phi_eeg": 0.8471,
+      "phi_diwt": 0.8471,
+      "intervened": false
+    },
+    {
+      "cycle": 78,
+      "eeg_signal": 38.287,
+      "phi_eeg": 0.7514,
+      "phi_diwt": 0.7514,
+      "intervened": false
+    },
+    {
+      "cycle": 79,
+      "eeg_signal": -79.06,
+      "phi_eeg": 0.7925,
+      "phi_diwt": 0.7925,
+      "intervened": false
+    },
+    {
+      "cycle": 80,
+      "eeg_signal": -6.357,
+      "phi_eeg": 0.8258,
+      "phi_diwt": 0.8258,
+      "intervened": false
+    },
+    {
+      "cycle": 81,
+      "eeg_signal": 8.218,
+      "phi_eeg": 0.8303,
+      "phi_diwt": 0.8303,
+      "intervened": false
+    },
+    {
+      "cycle": 82,
+      "eeg_signal": -60.353,
+      "phi_eeg": 0.8042,
+      "phi_diwt": 0.8042,
+      "intervened": false
+    },
+    {
+      "cycle": 83,
+      "eeg_signal": -17.834,
+      "phi_eeg": 0.8225,
+      "phi_diwt": 0.8225,
+      "intervened": false
+    },
+    {
+      "cycle": 84,
+      "eeg_signal": -22.064,
+      "phi_eeg": 0.8279,
+      "phi_diwt": 0.8279,
+      "intervened": false
+    },
+    {
+      "cycle": 85,
+      "eeg_signal": 73.583,
+      "phi_eeg": 0.7834,
+      "phi_diwt": 0.7834,
+      "intervened": false
+    },
+    {
+      "cycle": 86,
+      "eeg_signal": 7.818,
+      "phi_eeg": 0.8337,
+      "phi_diwt": 0.8337,
+      "intervened": false
+    },
+    {
+      "cycle": 87,
+      "eeg_signal": -75.565,
+      "phi_eeg": 0.7619,
+      "phi_diwt": 0.7619,
+      "intervened": false
+    },
+    {
+      "cycle": 88,
+      "eeg_signal": 83.649,
+      "phi_eeg": 0.7946,
+      "phi_diwt": 0.7946,
+      "intervened": false
+    },
+    {
+      "cycle": 89,
+      "eeg_signal": -15.596,
+      "phi_eeg": 0.8069,
+      "phi_diwt": 0.8069,
+      "intervened": false
+    },
+    {
+      "cycle": 90,
+      "eeg_signal": -58.054,
+      "phi_eeg": 0.7831,
+      "phi_diwt": 0.7831,
+      "intervened": false
+    },
+    {
+      "cycle": 91,
+      "eeg_signal": 93.344,
+      "phi_eeg": 0.8018,
+      "phi_diwt": 0.8018,
+      "intervened": false
+    },
+    {
+      "cycle": 92,
+      "eeg_signal": -84.847,
+      "phi_eeg": 0.8228,
+      "phi_diwt": 0.8228,
+      "intervened": false
+    },
+    {
+      "cycle": 93,
+      "eeg_signal": 69.391,
+      "phi_eeg": 0.8336,
+      "phi_diwt": 0.8336,
+      "intervened": false
+    },
+    {
+      "cycle": 94,
+      "eeg_signal": -95.935,
+      "phi_eeg": 0.7589,
+      "phi_diwt": 0.7589,
+      "intervened": false
+    },
+    {
+      "cycle": 95,
+      "eeg_signal": -67.227,
+      "phi_eeg": 0.8438,
+      "phi_diwt": 0.8438,
+      "intervened": false
+    },
+    {
+      "cycle": 96,
+      "eeg_signal": -66.207,
+      "phi_eeg": 0.8091,
+      "phi_diwt": 0.8091,
+      "intervened": false
+    },
+    {
+      "cycle": 97,
+      "eeg_signal": 68.095,
+      "phi_eeg": 0.8286,
+      "phi_diwt": 0.8286,
+      "intervened": false
+    },
+    {
+      "cycle": 98,
+      "eeg_signal": -45.285,
+      "phi_eeg": 0.7863,
+      "phi_diwt": 0.7863,
+      "intervened": false
+    },
+    {
+      "cycle": 99,
+      "eeg_signal": -70.192,
+      "phi_eeg": 0.8496,
+      "phi_diwt": 0.8496,
+      "intervened": false
+    }
+  ]
+}
