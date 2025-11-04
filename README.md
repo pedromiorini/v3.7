@@ -15,13 +15,13 @@
 ---
 
 ## DIWT v4.0: First Recorded Session with Human EEG
+[![Stars](https://img.shields.io/github/stars/pedromiorini/v3.7?style=social)](https://github.com/pedromiorini/v3.7)
 **Novo artigo:** [v4.0-closed-loop/diwt_v40_neurips.pdf](v4.0-closed-loop/diwt_v40_neurips.pdf)  
 **Demo:** [replay_session.py](v4.0-closed-loop/replay_session.py)  
 **Dados:** [session_recording.json](v4.0-closed-loop/session_recording.json)
 
-### Vídeo Demo: A Primeira Respiração da DIWT
-[Assista à sessão completa (2 minutos) → YouTube](https://youtu.be/DIWTv40_first_session)  
-*Gravado em 03/11/2025 com replay_session.py. Mostra Φ EEG → DIWT → Ação ética em tempo real.*
+### Vídeo Demo
+[Assista à primeira respiração → YouTube](https://youtu.be/DIWTv40_first_session)
 
 ---
 
