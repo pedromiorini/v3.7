@@ -76,22 +76,58 @@ Artefatos LaTeX já rastreados e que permanecem no índice: `v4.0-closed-loop/di
 
 ## 5. Comandos e resultados
 
-Pendente de execução. Preencher só depois de `pytest`, sem editar as seções 1–4.
+Preenchido depois da execução. As seções 1–4 não foram reescritas.
 
-Comandos previstos, a partir da raiz do repositório:
+Ambiente local: Python 3.12.3, numpy 1.26.4 já presente no sistema, pytest 9.1.1 instalado com `python3 -m pip install --user 'pytest>=8.3.0'`. `python3 -m venv` falhou (`ensurepip` ausente); não houve venv limpo nesta máquina. O CI (abaixo) instala `requirements.txt` do zero.
 
 ```bash
-python -m pip install -r requirements.txt
-pytest -v
-git status --short
-git rev-parse HEAD
-git diff --name-only origin/master...HEAD
+python3 -m pytest -v
 ```
+
+```text
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0
+collected 7 items
+
+tests/test_triade_contract.py::test_ethical_intervention_only_when_phi_below_threshold PASSED
+tests/test_triade_contract.py::test_phi_global_min_drops_under_middle_third_stress PASSED
+tests/test_triade_contract.py::test_saved_trajectory_cycles_match_request[1] PASSED
+tests/test_triade_contract.py::test_saved_trajectory_cycles_match_request[50] PASSED
+tests/test_triade_contract.py::test_saved_trajectory_cycles_match_request[200] PASSED
+tests/test_triade_contract.py::test_trajectory_is_deterministic_without_rng PASSED
+tests/test_triade_contract.py::test_committed_log_matches_fresh_run_except_date PASSED
+
+7 passed in 0.08s
+```
+
+`git status --short` depois do pytest: vazio. `data/triade_log.json` não mudou (os testes gravam o JSON num diretório temporário). `.pytest_cache/` está ignorado.
+
+CI no commit de testes `631b3282677b1ef5533df0c1f4bd2f0ee9816d72` (anterior a este registro):
+
+- Run: https://github.com/pedromiorini/v3.7/actions/runs/39905823992
+- Job `pytest`: success em 2026-10-23T05:27:24Z
+- Runner: `ubuntu-latest` (imagem Ubuntu 26.04), Python 3.12.15
+- `pip install -r requirements.txt` resolveu numpy 2.5.4 e pytest 9.1.1
+- Saída: `7 passed in 0.10s`
+
+Este commit só acrescenta a seção 5. O workflow dispara de novo no head da PR; o check desse head é o que fecha o critério de CI, não o run 39905823992.
+
+Arquivos no diff contra `origin/master` até o commit de testes:
+
+```text
+.github/workflows/ci.yml
+.gitignore
+docs/EVIDENCIA_PR1.md
+requirements.txt
+tests/conftest.py
+tests/test_triade_contract.py
+```
+
+`ARTICLE.md`, o PDF e os `.aux/.log/.blg/.out/.bbl` de `v4.0-closed-loop/` continuam rastreados e fora do diff.
 
 ### Como falsificar este PR
 
 - Um teste da seção 3 falha no head do PR → o contrato não se sustenta; o PR não está aceito.
 - `pytest` passa mas o teste cita 0.612 ou 0.838 como valor esperado → o teste não é o contrato pré-registrado.
 - O diff toca `ARTICLE.md`, o PDF, `eeg_phase2/` ou apaga `.aux/.log/.blg/.out/.bbl` já commitados → fora de escopo.
-- CI do head não fica verde e não há saída local de `pytest` colada abaixo → critério de aceite aberto.
+- CI do head não fica verde e não há saída local de `pytest` nesta seção → critério de aceite aberto.
 - O merge foi feito → viola o brief.
