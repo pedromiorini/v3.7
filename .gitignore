@@ -3,3 +3,24 @@ __pycache__/
 *.pth
 *.npy
 eeg_data/
+
+# pytest
+.pytest_cache/
+
+# LaTeX build artifacts. Arquivos já versionados em v4.0-closed-loop/ permanecem no índice.
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
