@@ -188,3 +188,40 @@ git diff --check
 ```
 
 A validação confirma que os pins podem ser instalados juntos e que os testes EEG sintéticos/stubs passam com MNE disponível; não reexecutou o baseline single-subject nem as avaliações LOSO, não baixou dados EEG e não demonstra que dependências transitivas ou outras plataformas produzirão artefatos idênticos. O ambiente completo de testes foi criado em `/tmp/diwt-eeg-test-venv`, fora do repositório.
+
+## Lock com hashes para testes EEG — 2026-11-26
+
+Base verificada antes da edição: branch `master`, `HEAD` e `origin/master` em `b4d7710c826355e934518f21dfaa57830a3f3c74`; checkout limpo. Esta etapa alterou somente o novo `eeg_phase2/requirements-test-cp312-linux-x86_64.lock`, `eeg_phase2/README.md` e este registro. Sem stage, commit ou push; manifests existentes, código experimental, dados e resultados foram preservados.
+
+- `requirements-test.txt` foi compilado com uv 0.12.13 usando `--generate-hashes`, `--only-binary :all:`, `--python-version 3.12` e `--python-platform x86_64-unknown-linux-gnu`. O lock contém 34 versões exatas e 953 entradas SHA-256; inclui a regra de instalação somente de wheels. O cabeçalho declara CPython 3.12/Linux x86_64 e identifica a resolução como específica de plataforma, não universal.
+- Comando de compilação:
+
+```bash
+uv pip compile eeg_phase2/requirements-test.txt --generate-hashes \
+  --python-version 3.12 --python-platform x86_64-unknown-linux-gnu \
+  --only-binary :all: --emit-build-options \
+  --output-file eeg_phase2/requirements-test-cp312-linux-x86_64.lock
+```
+
+- O README separa a instalação direta de `requirements.txt` (pins diretos apenas) da instalação do lock completo com `pip --require-hashes`.
+
+### Verificação desta etapa
+
+```bash
+python3 -m venv /tmp/diwt-eeg-lock-verify-20261126
+/tmp/diwt-eeg-lock-verify-20261126/bin/python -m pip install \
+  --require-hashes --only-binary=:all: \
+  -r eeg_phase2/requirements-test-cp312-linux-x86_64.lock
+/tmp/diwt-eeg-lock-verify-20261126/bin/python -m pip check
+# No broken requirements found.
+
+PYTHONDONTWRITEBYTECODE=1 /tmp/diwt-eeg-lock-verify-20261126/bin/python -m pytest \
+  -q -p no:cacheprovider tests/test_eeg_motor_imagery.py \
+  tests/test_eeg_loso.py tests/test_eeg_provenance.py
+# 61 passed in 3.85 s
+
+git diff --check
+# passed
+```
+
+A instalação verificada usou CPython 3.12.3 e pip 24.0; versões instaladas: MNE 1.13.2, NumPy 2.5.5, SciPy 1.18.1, scikit-learn 1.9.1 e pytest 9.1.1. Nenhum EDF foi baixado e nenhum experimento EEG foi executado; os testes usam dados sintéticos/stubs. O lock foi instalado/validado somente em Linux x86_64 com glibc 2.39. Ele não fixa o patch do Python, o `pip` ou o próprio uv, e não foi validado em outras plataformas/arquiteturas; não se afirma cobertura universal. O venv descartável foi criado fora do checkout.

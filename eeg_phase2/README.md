@@ -4,14 +4,24 @@ Os scripts desta pasta não demonstram consciência, não calculam IIT Φ e não
 
 ## Ambiente para análise EEG real
 
-Os resultados de referência foram executados com CPython 3.12.3. Crie o ambiente fora do clone e instale as versões diretas registradas em `requirements.txt`:
+Para uma instalação direta das dependências principais, os resultados de referência foram executados com CPython 3.12.3. Crie o ambiente fora do clone e instale os pins diretos de `requirements.txt`:
 
 ```bash
 python3 -m venv /tmp/diwt-eegbci-venv
 /tmp/diwt-eegbci-venv/bin/python -m pip install -r eeg_phase2/requirements.txt
 ```
 
-Esses pins permitem repetir as versões principais do pipeline, mas não formam um lock completo: dependências transitivas, ferramentas de build, plataforma e interpretador não são fixados por esse arquivo.
+Esse manifesto fixa apenas as versões diretas MNE, NumPy, SciPy e scikit-learn; ele não fixa as dependências transitivas.
+
+Para instalar o grafo completo usado nos testes EEG, com versões transitivas e hashes, use o lockfile separado:
+
+```bash
+python3 -m venv /tmp/diwt-eeg-test-venv
+/tmp/diwt-eeg-test-venv/bin/python -m pip install --require-hashes --only-binary=:all: \
+  -r eeg_phase2/requirements-test-cp312-linux-x86_64.lock
+```
+
+O lock foi compilado com uv 0.12.13 para CPython 3.12 e `x86_64-unknown-linux-gnu`, e verificado aqui em CPython 3.12.3/glibc 2.39. Ele é específico desse alvo, não um lock universal; outras versões de Python, sistemas ou arquiteturas não foram validados. A versão do próprio Python e do instalador `pip` não é fixada pelo lock. A compilação segue a [documentação oficial de uv](https://docs.astral.sh/uv/pip/compile/).
 
 ## Ingestão EEGBCI
 
@@ -84,14 +94,17 @@ Os resultados descrevem somente decoding offline para um sujeito em três runs d
 
 ### Testes offline do pipeline EEG
 
-Para executar os testes com MNE instalado — incluindo o teste de preservação dos tempos dos eventos, que de outro modo é pulado — crie um ambiente separado. Os testes usam sinais sintéticos/stubs e não baixam os EDFs:
+Para executar os testes com MNE instalado — incluindo o teste de preservação dos tempos dos eventos, que de outro modo é pulado — crie um ambiente separado e instale pelo lockfile completo, verificando hashes e usando wheels. Os testes usam sinais sintéticos/stubs e não baixam EDFs:
 
 ```bash
 python3 -m venv /tmp/diwt-eeg-test-venv
-/tmp/diwt-eeg-test-venv/bin/python -m pip install -r eeg_phase2/requirements-test.txt
+/tmp/diwt-eeg-test-venv/bin/python -m pip install --require-hashes --only-binary=:all: \
+  -r eeg_phase2/requirements-test-cp312-linux-x86_64.lock
 PYTHONDONTWRITEBYTECODE=1 /tmp/diwt-eeg-test-venv/bin/python -m pytest -q -p no:cacheprovider \
   tests/test_eeg_motor_imagery.py tests/test_eeg_loso.py tests/test_eeg_provenance.py
 ```
+
+`requirements-test.txt` é a entrada legível de dependências diretas para compilar o lock; instalá-lo diretamente não verifica hashes nem congela o grafo transitivo. O lock contém resolução para CPython 3.12/Linux x86_64, não cobre outras plataformas e não fixa a versão do interpretador ou do `pip`.
 
 ## Atribuição e referências
 
