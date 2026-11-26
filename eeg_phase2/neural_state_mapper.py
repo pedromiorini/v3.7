@@ -1,11 +1,17 @@
+"""Unvalidated sequence-model prototype with a synthetic demonstration trainer.
+
+The demo generates random features and random targets; it does not train on real
+EEG, decode a clinical or motor-imagery label, estimate consciousness, or compute
+IIT Phi. Its sigmoid output is only an arbitrary scalar score.
 """
-DIWT v4.0 Phase 2: Neural State Mapper
-Maps EEG signals to DIWT consciousness states using Mamba SSM
-"""
+from __future__ import annotations
+
+import os
+import tempfile
+from pathlib import Path
 
 import torch
 import torch.nn as nn
-import numpy as np
 
 try:
     from mamba_ssm import Mamba
@@ -15,8 +21,16 @@ except ImportError:
     print("Warning: mamba-ssm not installed. Using mock architecture.")
 
 
+DEFAULT_CHECKPOINT = (
+    Path.home()
+    / ".cache"
+    / "diwt-v3.7-mock"
+    / "neural_state_mapper.mock.generated.pth"
+)
+
+
 class NeuralStateMapper(nn.Module):
-    """Maps EEG signals to consciousness states using Mamba"""
+    """Map input sequences to an unvalidated scalar score in the range [0, 1]."""
     
     def __init__(self, d_model=64, d_state=16, d_conv=4, expand=2):
         super().__init__()
@@ -29,7 +43,7 @@ class NeuralStateMapper(nn.Module):
                 expand=expand
             )
         else:
-            # Fallback to LSTM
+            # Demonstration fallback only; this is not a validated EEG model.
             self.mamba = nn.LSTM(d_model, d_model, batch_first=True)
         
         self.fc = nn.Sequential(
@@ -40,54 +54,71 @@ class NeuralStateMapper(nn.Module):
         )
     
     def forward(self, x):
-        """
-        Args:
-            x: (batch, seq_len, d_model) EEG features
-        Returns:
-            phi: (batch, 1) consciousness measure
-        """
+        """Return an arbitrary scalar score for ``(batch, seq_len, d_model)`` input."""
         if MAMBA_AVAILABLE:
-            h = self.mamba(x)
+            hidden = self.mamba(x)
         else:
-            h, _ = self.mamba(x)
-        
-        # Pool over sequence dimension
-        h_pooled = h.mean(dim=1)
-        
-        # Map to phi value
-        phi = self.fc(h_pooled)
-        return phi
+            hidden, _ = self.mamba(x)
+
+        pooled = hidden.mean(dim=1)
+        return self.fc(pooled)
 
 
-def train_mock_model():
-    """Train a mock model for demonstration"""
-    print("Training Neural State Mapper (mock)...")
-    
+def save_mock_checkpoint(state_dict, checkpoint_path: str | Path = DEFAULT_CHECKPOINT) -> Path:
+    """Save synthetic demo weights to a new path; never overwrite existing data."""
+    target = Path(checkpoint_path).expanduser().resolve()
+    target.parent.mkdir(parents=True, exist_ok=True)
+    temporary: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            "w+b",
+            dir=target.parent,
+            prefix=f".{target.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as stream:
+            temporary = Path(stream.name)
+            torch.save(state_dict, stream)
+            stream.flush()
+            os.fsync(stream.fileno())
+        # Staging beside the destination keeps publication on one filesystem.
+        # link() creates the name only if no competing writer has created it.
+        os.link(temporary, target)
+    finally:
+        if temporary is not None:
+            try:
+                temporary.unlink()
+            except FileNotFoundError:
+                pass
+    return target
+
+
+def train_mock_model(checkpoint_path: str | Path = DEFAULT_CHECKPOINT) -> Path:
+    """Train a toy demo on synthetic random targets, not on real EEG.
+
+    This is not a validated EEG decoder, a consciousness model, or an IIT Phi
+    measure. The resulting checkpoint contains demo weights only.
+    """
+    print("Training synthetic Neural State Mapper demo; inputs and targets are random...")
     model = NeuralStateMapper()
-    
-    # Mock training loop
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    
+
     for epoch in range(10):
-        # Generate mock batch
-        x = torch.randn(8, 100, 64)  # 8 samples, 100 timesteps, 64 features
-        y = torch.rand(8, 1)  # Target phi values
-        
-        # Forward pass
-        phi_pred = model(x)
-        loss = nn.MSELoss()(phi_pred, y)
-        
-        # Backward pass
+        x = torch.randn(8, 100, 64)
+        y = torch.rand(8, 1)
+        score = model(x)
+        loss = nn.MSELoss()(score, y)
+
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        
+
         if epoch % 3 == 0:
-            print(f"Epoch {epoch}: Loss = {loss.item():.4f}")
-    
-    # Save model
-    torch.save(model.state_dict(), 'eeg_phase2/neural_state_mapper.pth')
-    print("✓ Model saved to eeg_phase2/neural_state_mapper.pth")
+            print(f"Epoch {epoch}: synthetic-demo loss = {loss.item():.4f}")
+
+    saved = save_mock_checkpoint(model.state_dict(), checkpoint_path)
+    print(f"Saved explicitly synthetic demo checkpoint: {saved}")
+    return saved
 
 
 if __name__ == "__main__":

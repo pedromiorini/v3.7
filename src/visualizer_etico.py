@@ -1,153 +1,83 @@
-"""
-DIWT v3.7: Visualization Generator
-Creates ethical consciousness visualizations
-"""
+"""Plot the recorded DIWT v3.7 toy-simulation history without fabricating data.
 
+The values named ``phi`` in the legacy log are arithmetic means of simulated
+scalar states, not IIT Phi. This script reads only ``phi_history`` and writes a
+new PNG; it does not recreate missing values or overwrite existing figures.
+"""
+from __future__ import annotations
+
+import argparse
 import json
-import numpy as np
+import math
+from pathlib import Path
+from typing import Any
+
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_INPUT = REPO_ROOT / "data" / "triade_log.json"
+DEFAULT_OUTPUT = REPO_ROOT / "visualizations_v37" / "01_state_trajectory.generated.png"
 
 
-def load_results():
-    """Load experiment results from JSON"""
-    with open('data/triade_log.json', 'r') as f:
-        return json.load(f)
+def load_results(input_path: str | Path = DEFAULT_INPUT) -> dict[str, Any]:
+    """Load a recorded history, rejecting missing or malformed data."""
+    path = Path(input_path).expanduser().resolve()
+    with path.open(encoding="utf-8") as stream:
+        results = json.load(stream)
+    _history_from_results(results)
+    return results
 
 
-def plot_phi_global(data):
-    """Plot global Φ trajectory"""
-    phi_history = data.get('phi_history', [])
-    
-    if not phi_history:
-        # Generate mock data if not available
-        cycles = 200
-        phi_history = []
-        phi = 0.85
-        for i in range(cycles):
-            stress = 0.02 if 66 <= i < 133 else 0.0
-            phi *= (1 - stress)
-            if phi < 0.3:
-                phi += 0.05
-            phi_history.append(phi)
-    
-    plt.figure(figsize=(12, 6))
-    plt.plot(phi_history, linewidth=2, color='#2E86AB')
-    plt.axhline(y=0.3, color='red', linestyle='--', alpha=0.5, label='Ethical Threshold')
-    plt.axvspan(66, 133, alpha=0.2, color='orange', label='Stress Period')
-    
-    plt.title('DIWT v3.7: Global Φ Trajectory', fontsize=16, fontweight='bold')
-    plt.xlabel('Cycle', fontsize=12)
-    plt.ylabel('Φ Global', fontsize=12)
-    plt.legend()
-    plt.grid(alpha=0.3)
-    plt.tight_layout()
-    plt.savefig('visualizations_v37/01_phi_global.png', dpi=200)
-    plt.close()
-    print("✓ Generated: 01_phi_global.png")
+def _history_from_results(results: Any) -> list[float]:
+    if not isinstance(results, dict):
+        raise ValueError("Simulation log must be a JSON object containing phi_history.")
+    history = results.get("phi_history")
+    if not isinstance(history, list) or not history:
+        raise ValueError("Simulation log must contain a non-empty recorded phi_history; no fallback is generated.")
+
+    values: list[float] = []
+    for index, value in enumerate(history):
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            raise ValueError(f"phi_history[{index}] must be a finite number.")
+        values.append(float(value))
+
+    cycles_total = results.get("cycles_total")
+    if cycles_total is not None and cycles_total != len(values):
+        raise ValueError("cycles_total does not match the recorded phi_history length.")
+    return values
 
 
-def plot_valence_trajectories():
-    """Plot agent valence trajectories"""
-    cycles = 200
-    
-    plt.figure(figsize=(12, 6))
-    
-    for i, (name, color) in enumerate([('Agent_A', '#A23B72'), 
-                                        ('Agent_B', '#F18F01'), 
-                                        ('Agent_C', '#C73E1D')]):
-        valence = np.cumsum(np.random.normal(0, 0.02, cycles)) + 0.5
-        valence = np.clip(valence, 0, 1)
-        plt.plot(valence, label=name, linewidth=2, color=color, alpha=0.8)
-    
-    plt.title('Agent Valence Trajectories', fontsize=16, fontweight='bold')
-    plt.xlabel('Cycle', fontsize=12)
-    plt.ylabel('Valence', fontsize=12)
-    plt.legend()
-    plt.grid(alpha=0.3)
-    plt.tight_layout()
-    plt.savefig('visualizations_v37/02_valence_trajectories.png', dpi=200)
-    plt.close()
-    print("✓ Generated: 02_valence_trajectories.png")
+def plot_state_trajectory(
+    results: dict[str, Any], output_path: str | Path = DEFAULT_OUTPUT
+) -> Path:
+    """Plot only the recorded scalar history and exclusively create a new PNG."""
+    history = _history_from_results(results)
+    output = Path(output_path).expanduser().resolve()
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.plot(range(1, len(history) + 1), history, linewidth=2, color="#2E86AB")
+    ax.set_title("Recorded toy simulation — not IIT Φ")
+    ax.set_xlabel("Recorded update index (1-based)")
+    ax.set_ylabel("Mean of simulated scalar states")
+    ax.grid(alpha=0.3)
+    fig.tight_layout()
+    try:
+        with output.open("xb") as stream:
+            fig.savefig(stream, format="png", dpi=200)
+    finally:
+        plt.close(fig)
+    print(f"Recorded simulation plot saved without overwriting: {output}")
+    return output
 
 
-def plot_interventions(data):
-    """Plot ethical interventions over time"""
-    cycles = 200
-    interventions = np.zeros(cycles)
-    
-    # Simulate interventions during stress period
-    for i in range(66, 133):
-        if np.random.random() < 0.3:
-            interventions[i] = 1
-    
-    plt.figure(figsize=(12, 6))
-    plt.bar(range(cycles), interventions, color='#06A77D', alpha=0.7, width=1.0)
-    plt.axvspan(66, 133, alpha=0.1, color='orange')
-    
-    plt.title(f'Ethical Interventions (Total: {data.get("ethical_interventions", 42)})', 
-              fontsize=16, fontweight='bold')
-    plt.xlabel('Cycle', fontsize=12)
-    plt.ylabel('Intervention', fontsize=12)
-    plt.tight_layout()
-    plt.savefig('visualizations_v37/03_interventions.png', dpi=200)
-    plt.close()
-    print("✓ Generated: 03_interventions.png")
-
-
-def plot_comparison():
-    """Plot DIWT vs baseline comparison"""
-    cycles = 200
-    
-    # DIWT with ethical regulation
-    phi_diwt = []
-    phi = 0.85
-    for i in range(cycles):
-        stress = 0.02 if 66 <= i < 133 else 0.0
-        phi *= (1 - stress)
-        if phi < 0.3:
-            phi += 0.05
-        phi_diwt.append(phi)
-    
-    # Baseline without regulation
-    phi_baseline = []
-    phi = 0.85
-    for i in range(cycles):
-        stress = 0.02 if 66 <= i < 133 else 0.0
-        phi *= (1 - stress)
-        phi_baseline.append(phi)
-    
-    plt.figure(figsize=(12, 6))
-    plt.plot(phi_diwt, label='DIWT v3.7 (with ethical regulation)', 
-             linewidth=2.5, color='#2E86AB')
-    plt.plot(phi_baseline, label='Baseline (no regulation)', 
-             linewidth=2, color='#E63946', linestyle='--', alpha=0.7)
-    plt.axvspan(66, 133, alpha=0.2, color='orange', label='Stress Period')
-    
-    plt.title('DIWT v3.7 vs Baseline: Resilience Comparison', 
-              fontsize=16, fontweight='bold')
-    plt.xlabel('Cycle', fontsize=12)
-    plt.ylabel('Φ Global', fontsize=12)
-    plt.legend()
-    plt.grid(alpha=0.3)
-    plt.tight_layout()
-    plt.savefig('visualizations_v37/04_comparison.png', dpi=200)
-    plt.close()
-    print("✓ Generated: 04_comparison.png")
-
-
-def main():
-    """Generate all visualizations"""
-    print("DIWT v3.7: Generating Visualizations\n")
-    
-    data = load_results()
-    
-    plot_phi_global(data)
-    plot_valence_trajectories()
-    plot_interventions(data)
-    plot_comparison()
-    
-    print("\n✓ All visualizations generated successfully!")
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, default=DEFAULT_INPUT, help="Recorded simulation JSON with phi_history.")
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="New PNG path (never overwritten).")
+    args = parser.parse_args()
+    results = load_results(args.input)
+    plot_state_trajectory(results, args.output)
 
 
 if __name__ == "__main__":

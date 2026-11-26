@@ -1,63 +1,63 @@
-"""
-DIWT v4.0 Phase 2: EEG-DIWT Convergence Visualization
-Shows convergence between EEG-derived Φ and DIWT Φ
-"""
+"""Create a synthetic illustration; no EEG is loaded or analyzed."""
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = REPO_ROOT / "visualizations_v37" / "eeg_convergence.synthetic.png"
 
-def generate_convergence_plot():
-    """Generate EEG ↔ DIWT convergence visualization"""
-    
+
+def generate_convergence_plot(output_path: str | Path = DEFAULT_OUTPUT, seed: int | None = None) -> Path:
+    """Write an illustrative synthetic plot to a new path, never over an existing file."""
+    rng = np.random.default_rng(seed)
     cycles = 200
-    
-    # Simulate EEG-derived Φ (noisy, from neural data)
-    phi_eeg = np.cumsum(np.random.normal(0, 0.05, cycles)) + 0.5
-    phi_eeg = np.clip(phi_eeg, 0.2, 0.9)
-    
-    # Simulate DIWT Φ (converging to EEG)
-    phi_diwt = [0.3]
-    alpha = 0.025  # Convergence rate
-    
-    for i in range(1, cycles):
-        # Convergence dynamics: DIWT adapts to EEG
-        phi_diwt.append(phi_diwt[-1] + alpha * (phi_eeg[i] - phi_diwt[-1]))
-    
-    # Calculate convergence error
-    error = np.abs(phi_eeg - np.array(phi_diwt))
-    
-    # Create figure with subplots
+    signal_proxy = np.cumsum(rng.normal(0, 0.05, cycles)) + 0.5
+    signal_proxy = np.clip(signal_proxy, 0.2, 0.9)
+    diwt_simulated = [0.3]
+    alpha = 0.025
+    for index in range(1, cycles):
+        diwt_simulated.append(diwt_simulated[-1] + alpha * (signal_proxy[index] - diwt_simulated[-1]))
+    error = np.abs(signal_proxy - np.asarray(diwt_simulated))
+
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8))
-    
-    # Plot 1: Φ trajectories
-    ax1.plot(phi_eeg, label='Φ EEG (Neural)', alpha=0.7, 
-             linewidth=2, color='#E63946', linestyle='--')
-    ax1.plot(phi_diwt, label='Φ DIWT (Model)', 
-             linewidth=2.5, color='#2E86AB')
-    ax1.set_title('EEG ↔ DIWT Convergence', fontsize=16, fontweight='bold')
-    ax1.set_xlabel('Cycle', fontsize=12)
-    ax1.set_ylabel('Φ Value', fontsize=12)
-    ax1.legend(fontsize=11)
+    ax1.plot(signal_proxy, label="Synthetic signal proxy (not EEG or IIT Phi)", alpha=0.8, linewidth=2, color="#E63946", linestyle="--")
+    ax1.plot(diwt_simulated, label="Simulated DIWT value", linewidth=2.5, color="#2E86AB")
+    ax1.set_title("Synthetic illustration — not EEG evidence")
+    ax1.set_xlabel("Cycle")
+    ax1.set_ylabel("Illustrative value")
+    ax1.legend()
     ax1.grid(alpha=0.3)
-    
-    # Plot 2: Convergence error
-    ax2.plot(error, linewidth=2, color='#06A77D')
-    ax2.fill_between(range(cycles), 0, error, alpha=0.3, color='#06A77D')
-    ax2.set_title('Convergence Error', fontsize=14, fontweight='bold')
-    ax2.set_xlabel('Cycle', fontsize=12)
-    ax2.set_ylabel('|Φ_EEG - Φ_DIWT|', fontsize=12)
+    ax2.plot(error, linewidth=2, color="#06A77D")
+    ax2.fill_between(range(cycles), 0, error, alpha=0.3, color="#06A77D")
+    ax2.set_title("Synthetic difference between generated curves")
+    ax2.set_xlabel("Cycle")
+    ax2.set_ylabel("Absolute difference")
     ax2.grid(alpha=0.3)
-    
-    plt.tight_layout()
-    plt.savefig('visualizations_v37/eeg_convergence.png', dpi=200)
-    plt.close()
-    
-    print("✓ Generated: visualizations_v37/eeg_convergence.png")
-    print(f"  Final error: {error[-1]:.4f}")
-    print(f"  Mean error: {np.mean(error):.4f}")
+    fig.tight_layout()
+
+    output = Path(output_path).expanduser().resolve()
+    output.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with output.open("xb") as stream:
+            fig.savefig(stream, format="png", dpi=200)
+    finally:
+        plt.close(fig)
+    print(f"Synthetic illustration saved without overwriting: {output}")
+    print(f"Final difference: {error[-1]:.4f}; mean difference: {np.mean(error):.4f}")
+    return output
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="New PNG path (never overwritten).")
+    parser.add_argument("--seed", type=int, default=None, help="Optional seed for reproducible synthetic illustration.")
+    args = parser.parse_args()
+    generate_convergence_plot(args.output, args.seed)
 
 
 if __name__ == "__main__":
-    print("DIWT v4.0 Phase 2: Generating EEG Convergence Plot\n")
-    generate_convergence_plot()
+    main()
