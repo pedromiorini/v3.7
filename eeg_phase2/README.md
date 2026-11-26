@@ -2,12 +2,23 @@
 
 Os scripts desta pasta não demonstram consciência, não calculam IIT Φ e não estabelecem convergência ou correlação EEG↔DIWT. Eles oferecem uma ingestão opcional de dados públicos EEGBCI, uma tarefa de classificação offline definida e exemplos de simulação.
 
+## Ambiente para análise EEG real
+
+Os resultados de referência foram executados com CPython 3.12.3. Crie o ambiente fora do clone e instale as versões diretas registradas em `requirements.txt`:
+
+```bash
+python3 -m venv /tmp/diwt-eegbci-venv
+/tmp/diwt-eegbci-venv/bin/python -m pip install -r eeg_phase2/requirements.txt
+```
+
+Esses pins permitem repetir as versões principais do pipeline, mas não formam um lock completo: dependências transitivas, ferramentas de build, plataforma e interpretador não são fixados por esse arquivo.
+
 ## Ingestão EEGBCI
 
 `download_eeg_data.py` usa MNE e `mne.datasets.eegbci.load_data` para obter o caminho local retornado pelo MNE, ler o EDF e aplicar um filtro passa-banda de 1–45 Hz. A função do MNE pode baixar dados do PhysioNet se ainda não estiverem no cache ([documentação oficial](https://mne.tools/stable/generated/mne.datasets.eegbci.load_data.html)). O comando, portanto, precisa de MNE e pode usar a rede:
 
 ```bash
-python eeg_phase2/download_eeg_data.py
+/tmp/diwt-eegbci-venv/bin/python eeg_phase2/download_eeg_data.py
 ```
 
 Por padrão, o script grava `~/.cache/diwt-v3.7-real-eeg/raw_eeg.npy` e `raw_eeg.provenance.json`; o cache EDF do MNE fica em `~/.cache/diwt-v3.7-real-eeg/eegbci`. Ambos são fora do repositório. `--output` e `--dataset-dir` podem receber caminhos explícitos, mas o downloader recusa qualquer caminho que, após resolução, fique dentro da raiz Git — antes de baixar ou gravar EEG. A saída inclui origem, processamento, dimensão, unidade, frequência amostral e SHA-256 do array. O gravador exige que checksum, formato e frequência coincidam com o sidecar; isso detecta troca ou corrupção acidental, mas não autentica o sidecar. Se MNE não estiver instalado, o downloader falha explicitamente; não fabrica dados. Também não sobrescreve saídas existentes e publica o par sem deixar saídas parciais em falhas normais. O downloader legado não faz parte da execução abaixo.
@@ -18,12 +29,10 @@ Por padrão, o script grava `~/.cache/diwt-v3.7-real-eeg/raw_eeg.npy` e `raw_eeg
 
 O protocolo usa validação leave-one-run-out: em cada fold, um run inteiro é teste e os outros dois são treino. Não divide épocas do mesmo run entre treino e teste; CSP e LDA são ajustados novamente apenas com os runs de treino de cada fold. A análise usa referência média projetada, montage `colin27_1005`, filtro FIR passa-banda 7–30 Hz, épocas de 1,0 a 2,0 s após o evento, CSP com 4 componentes (`log=True`, `norm_trace=False`) e `LinearDiscriminantAnalysis(solver="svd")`, seguindo o pipeline do [tutorial oficial CSP do MNE](https://mne.tools/stable/auto_examples/decoding/decoding_csp_eeg.html). Não há busca de hiperparâmetros neste conjunto.
 
-Crie um ambiente virtual fora do repositório e instale as dependências; a primeira execução pode baixar os EDFs públicos para o cache indicado:
+Com o ambiente criado acima, execute o classificador; a primeira execução pode baixar os EDFs públicos para o cache indicado:
 
 ```bash
-python3 -m venv /tmp/diwt-eeg-venv
-/tmp/diwt-eeg-venv/bin/pip install mne scikit-learn
-/tmp/diwt-eeg-venv/bin/python eeg_phase2/classify_motor_imagery.py \
+/tmp/diwt-eegbci-venv/bin/python eeg_phase2/classify_motor_imagery.py \
   --dataset-dir "$HOME/.cache/diwt-v3.7-real-eeg/eegbci" \
   --output "$HOME/.cache/diwt-v3.7-real-eeg/subject-01-runs-04-08-12.json"
 ```
@@ -58,23 +67,31 @@ A execução estrita excluiu os IDs 88, 92 e 100 por incompatibilidade de frequ�
 
 Os relatórios JSON completos foram mantidos fora do Git, em `/workspace/diwt-v37-eegbci-loso-results/eegbci_loso_runs_04_08_12_20261120.json` (estrita) e `/workspace/diwt-v37-eegbci-loso-results/eegbci_loso_runs_04_08_12_resampled128_20261120.json` (128 Hz). Os hashes SHA-256 dos scripts e do baseline helper registrados neles coincidem com os arquivos integrados. Nos dois registros históricos, `execution.repository.branch` está vazio (`""`); portanto, eles não identificam em qual branch foram executados, embora guardem commit e hashes de código. Os EDFs permanecem no cache externo; nenhum dado EEG bruto foi copiado para o repositório.
 
-Para reproduzir em uma máquina com acesso à internet, instale MNE e scikit-learn num ambiente virtual. O primeiro uso pode baixar os EDFs públicos; mantenha o cache e os relatórios fora do clone, e escolha caminhos de saída novos porque os scripts nunca sobrescrevem resultados:
+Para reproduzir em uma máquina com acesso à internet, reutilize o ambiente criado acima. O primeiro uso pode baixar os EDFs públicos; mantenha o cache e os relatórios fora do clone, e escolha caminhos de saída novos porque os scripts nunca sobrescrevem resultados:
 
 ```bash
-python3 -m venv /tmp/diwt-eegbci-loso-venv
-/tmp/diwt-eegbci-loso-venv/bin/pip install mne scikit-learn
-
 cache="$HOME/.cache/diwt-v37-eegbci-loso/eegbci"
 out="$HOME/.cache/diwt-v37-eegbci-loso"
-/tmp/diwt-eegbci-loso-venv/bin/python eeg_phase2/classify_motor_imagery_loso_strict.py \
+/tmp/diwt-eegbci-venv/bin/python eeg_phase2/classify_motor_imagery_loso_strict.py \
   --dataset-dir "$cache" --output "$out/strict-20261120.json"
-/tmp/diwt-eegbci-loso-venv/bin/python eeg_phase2/classify_motor_imagery_loso.py \
+/tmp/diwt-eegbci-venv/bin/python eeg_phase2/classify_motor_imagery_loso.py \
   --dataset-dir "$cache" --output "$out/resampled128-20261120.json"
 ```
 
-O script estrito usa a frequência nativa comum e não aceita `--target-sfreq-hz`; a variante secundária usa 128 Hz por padrão. Para os testes offline, rode `python3 -m pytest -q tests/test_eeg_loso.py`; não baixam EEG, e o teste real de preservação dos tempos de evento é pulado se MNE não estiver instalado.
+O script estrito usa a frequência nativa comum e não aceita `--target-sfreq-hz`; a variante secundária usa 128 Hz por padrão. Os testes EEG abaixo são offline e não baixam EDFs.
 
 Os resultados descrevem somente decoding offline para um sujeito em três runs de um dataset público. Eles não demonstram IIT Φ, consciência, eficácia ética, generalização populacional ou desempenho de BCI online. O carregamento de dados públicos não transforma os exemplos `MockDIWT`, o gravador/reprodutor de demonstração, ou os campos simulados abaixo em medidas reais.
+
+### Testes offline do pipeline EEG
+
+Para executar os testes com MNE instalado — incluindo o teste de preservação dos tempos dos eventos, que de outro modo é pulado — crie um ambiente separado. Os testes usam sinais sintéticos/stubs e não baixam os EDFs:
+
+```bash
+python3 -m venv /tmp/diwt-eeg-test-venv
+/tmp/diwt-eeg-test-venv/bin/python -m pip install -r eeg_phase2/requirements-test.txt
+PYTHONDONTWRITEBYTECODE=1 /tmp/diwt-eeg-test-venv/bin/python -m pytest -q -p no:cacheprovider \
+  tests/test_eeg_motor_imagery.py tests/test_eeg_loso.py tests/test_eeg_provenance.py
+```
 
 ## Atribuição e referências
 

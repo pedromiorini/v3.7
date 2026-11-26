@@ -156,3 +156,35 @@ Também foram verificados os elementos de atribuição e referências nos três 
 ## Estado atual após publicação — 2026-11-26
 
 O commit de atribuição `073b897075635ececfd98c8f378b1098ba294250` está publicado em `master`; `HEAD` e `origin/master` coincidem nesse SHA e a árvore de trabalho estava limpa na checagem. A revisão independente confirmou as três citações e os DOIs contra as fontes oficiais, o alcance do aviso ODC-By §§2.4/4.3 e a preservação das métricas no PDF. Não encontrou erro material e não reexecutou o experimento.
+
+
+## Pins diretos e testes reproduzíveis do pipeline EEG — 2026-11-26
+
+Base confirmada antes da edição: branch `master`, `HEAD` e `origin/master` em `c72306288a11373df6db6f916151303c61e39777`, checkout limpo. Esta etapa alterou `eeg_phase2/requirements.txt`, `eeg_phase2/requirements-test.txt`, `eeg_phase2/README.md` e este registro. Sem commit ou push; código experimental, métricas, relatórios e dados não foram alterados.
+
+- `eeg_phase2/requirements.txt` fixa MNE 1.13.2, NumPy 2.5.5, SciPy 1.18.1 e scikit-learn 1.9.1, versões registradas no ambiente das execuções EEG single-subject/LOSO. `requirements-test.txt` inclui esses pins e pytest 9.1.1, versão observada no ambiente base desta etapa.
+- O README agora instrui criar o ambiente de análise fora do clone, instalar pelo manifest e reutilizar o mesmo ambiente na ingestão/classificadores. Também documenta um ambiente separado para os testes EEG offline; inclui MNE para que o teste que antes era pulado possa rodar.
+- Os manifests pinam as versões dos pacotes listados, não todo o grafo: dependências transitivas, hashes de artefatos, pip/build backend, plataforma e a versão do próprio Python não são congelados. CPython 3.12.3 é a versão observada/registrada para as execuções, não uma restrição imposta pelo arquivo de requirements.
+
+### Verificação desta etapa
+
+```bash
+python3 -m venv /tmp/diwt-eeg-test-venv
+/tmp/diwt-eeg-test-venv/bin/python -m pip install -r eeg_phase2/requirements-test.txt
+/tmp/diwt-eeg-test-venv/bin/python -m pip check
+# No broken requirements found.
+# Versões verificadas: Python 3.12.3; MNE 1.13.2; NumPy 2.5.5;
+# SciPy 1.18.1; scikit-learn 1.9.1; pytest 9.1.1.
+
+PYTHONDONTWRITEBYTECODE=1 /tmp/diwt-eeg-test-venv/bin/python -m pytest -q -p no:cacheprovider \
+  tests/test_eeg_motor_imagery.py tests/test_eeg_loso.py tests/test_eeg_provenance.py
+# 61 passed em 3.94 s; nenhum EDF baixado.
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider
+# 66 passed, 1 skipped em 6.26 s; skip do teste dependente de MNE no ambiente base.
+
+git diff --check
+# passed
+```
+
+A validação confirma que os pins podem ser instalados juntos e que os testes EEG sintéticos/stubs passam com MNE disponível; não reexecutou o baseline single-subject nem as avaliações LOSO, não baixou dados EEG e não demonstra que dependências transitivas ou outras plataformas produzirão artefatos idênticos. O ambiente completo de testes foi criado em `/tmp/diwt-eeg-test-venv`, fora do repositório.

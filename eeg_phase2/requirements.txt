@@ -1,0 +1,5 @@
+# Versões diretas registradas nas execuções verificadas do pipeline EEG (CPython 3.12.3).
+mne==1.13.2
+numpy==2.5.5
+scipy==1.18.1
+scikit-learn==1.9.1
