@@ -52,6 +52,16 @@ python3 -m venv /tmp/diwt-eeg-venv
 
 O script recusa sobrescrever saída existente e recusa guardar EEG bruto dentro do repositório. Os dados EDF não foram adicionados ao Git.
 
+## Atribuição e referências
+
+Este material contém informação da [EEG Motor Movement/Imagery Database (EEGMMIDB)](https://www.physionet.org/content/eegmmidb/1.0.0/), disponibilizada sob a [ODC Attribution License v1.0](https://www.physionet.org/content/eegmmidb/view-license/1.0.0/). O aviso identifica a fonte e a licença do banco de dados, mas não resolve eventuais direitos adicionais sobre conteúdos individuais, ressalvados pela própria licença.
+
+Referências solicitadas pelo PhysioNet:
+
+- Schalk, G. (2009). *EEG Motor Movement/Imagery Dataset* (version 1.0.0). PhysioNet. RRID:SCR_007345. [DOI: 10.13026/C28G6P](https://doi.org/10.13026/C28G6P).
+- Schalk, G., McFarland, D.J., Hinterberger, T., Birbaumer, N., & Wolpaw, J.R. (2004). BCI2000: A General-Purpose Brain-Computer Interface (BCI) System. *IEEE Transactions on Biomedical Engineering, 51*(6), 1034–1043. [DOI: 10.1109/TBME.2004.827072](https://doi.org/10.1109/TBME.2004.827072).
+- Pollard, T., Moody, B.E., Lehman, L., Gow, B., Fernandes, C., Xie, C., Johnson, A., Mark, R.G., & Heldt, T. (2026). PhysioNet as a global platform for biomedical research. *Nature Health*. [DOI: 10.1038/s44360-026-00096-z](https://doi.org/10.1038/s44360-026-00096-z).
+
 ## Limitações e alegações que este resultado não apoia
 
 Este baseline abrange uma pessoa, três runs e 45 épocas; não mede a generalização a novos participantes, sessões, equipamentos ou condições. Não mede BCI online, clínica, consciência, IIT Φ, eficácia ética ou correlação entre EEG e a simulação DIWT. A sessão legada v4.0 (`session_recording.json`) não tem proveniência independente e registra `phi_eeg=2.0` constante; essa série não sustenta a alegação de correlação 0,91. O TeX/PDF antigo foi arquivado como material histórico não verificado e não deve ser distribuído como evidência deste estudo.

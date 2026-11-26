@@ -125,3 +125,30 @@ git diff --check
 ```
 
 Não houve nova execução dos experimentos EEG nem edição dos JSONs históricos. O checkout permanece sem stage/commit/push; a árvore contém outras alterações locais anteriores, preservadas.
+
+
+## Atribuição EEGMMIDB nos materiais públicos — 2026-11-26
+
+Base verificada: branch `master`, HEAD e `origin/master` em `9262808221dd631f443db441a3e66d5be2bc1a49`. O checkout estava limpo antes desta etapa. Foram alterados localmente `eeg_phase2/README.md`, `ARTICLE.md`, `v4.0-closed-loop/diwt_v40_eegbci_baseline.md`, o PDF gerado correspondente e este registro. Nenhum stage, commit, push ou publicação foi feito.
+
+- As três páginas públicas de resultados agora incluem aviso visível, com links, de que contêm informação da [EEGMMIDB no PhysioNet](https://www.physionet.org/content/eegmmidb/1.0.0/) e que a base está disponível sob a [ODC Attribution License v1.0](https://www.physionet.org/content/eegmmidb/view-license/1.0.0/). Cada uma também registra as três citações que o PhysioNet solicita: Schalk (2009), artigo original BCI2000 (Schalk et al., 2004; DOI `10.1109/TBME.2004.827072`) e a citação padrão PhysioNet (Pollard et al., 2026; DOI `10.1038/s44360-026-00096-z`). O artigo original foi conferido no [PubMed](https://pubmed.ncbi.nlm.nih.gov/15188875/); as demais informações constam da página oficial EEGMMIDB.
+- Os textos esclarecem apenas que o aviso identifica fonte/licença do banco de dados e não resolve eventuais direitos adicionais sobre conteúdos individuais, conforme a ressalva da seção 2.4 da licença. Isso não é parecer jurídico. Não foram alteradas alegações científicas, resultados numéricos, código ou dados EEG brutos.
+- Antes de substituir o PDF, foi preservada cópia idêntica em `/workspace/.diwt_v40_eegbci_baseline.pre-attribution-20261126.pdf`, SHA-256 `9fbb278a4db8d0426ada1dbe92e558d1bf90e4c289336b74a8a577d94d4a2aec`. O novo PDF foi renderizado do Markdown com `python3 scripts/render_eeg_baseline.py --output v4.0-closed-loop/.diwt_v40_eegbci_baseline.attribution-prepared.pdf`, validado e movido sobre o destino por rename; SHA-256 novo `b829e2775443bd565fb0398e43d9eb06fc07b210c7abc65aa9512cef32389e63`.
+
+### Verificação desta etapa
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider
+# 66 passed, 1 skipped (teste dependente de MNE no ambiente base)
+
+git diff --check
+# passed
+
+pdfinfo v4.0-closed-loop/diwt_v40_eegbci_baseline.pdf
+# PDF 1.7 válido, 3 páginas A4, sem criptografia
+
+pdftotext -layout v4.0-closed-loop/diwt_v40_eegbci_baseline.pdf -
+# confirmação de aviso/licença, citações, DOI e ressalva
+```
+
+Também foram verificados os elementos de atribuição e referências nos três Markdown e a extração textual do PDF. A comparação da extração antes/depois confirmou idênticas as quatro linhas numéricas: run 4 `0,7857 / 0,8000`; run 8 `0,4732 / 0,4667`; run 12 `0,6161 / 0,6000`; agregado `0,6196 / 0,6222` com matriz `[[17, 6], [11, 11]]`. Nenhum dado bruto foi incluído. A suíte pulou um teste porque MNE não está instalado no ambiente base; não houve nova execução do experimento nem validação de direitos além do texto oficial da licença. O trabalho permanece local e sem commit ou publicação.

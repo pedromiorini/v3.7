@@ -76,6 +76,16 @@ O script estrito usa a frequência nativa comum e não aceita `--target-sfreq-hz
 
 Os resultados descrevem somente decoding offline para um sujeito em três runs de um dataset público. Eles não demonstram IIT Φ, consciência, eficácia ética, generalização populacional ou desempenho de BCI online. O carregamento de dados públicos não transforma os exemplos `MockDIWT`, o gravador/reprodutor de demonstração, ou os campos simulados abaixo em medidas reais.
 
+## Atribuição e referências
+
+Este material contém informação da [EEG Motor Movement/Imagery Database (EEGMMIDB)](https://www.physionet.org/content/eegmmidb/1.0.0/), disponibilizada sob a [ODC Attribution License v1.0](https://www.physionet.org/content/eegmmidb/view-license/1.0.0/). O aviso identifica a fonte e a licença do banco de dados, mas não resolve eventuais direitos adicionais sobre conteúdos individuais, ressalvados pela própria licença.
+
+Referências solicitadas pelo PhysioNet:
+
+- Schalk, G. (2009). *EEG Motor Movement/Imagery Dataset* (version 1.0.0). PhysioNet. RRID:SCR_007345. [DOI: 10.13026/C28G6P](https://doi.org/10.13026/C28G6P).
+- Schalk, G., McFarland, D.J., Hinterberger, T., Birbaumer, N., & Wolpaw, J.R. (2004). BCI2000: A General-Purpose Brain-Computer Interface (BCI) System. *IEEE Transactions on Biomedical Engineering, 51*(6), 1034–1043. [DOI: 10.1109/TBME.2004.827072](https://doi.org/10.1109/TBME.2004.827072).
+- Pollard, T., Moody, B.E., Lehman, L., Gow, B., Fernandes, C., Xie, C., Johnson, A., Mark, R.G., & Heldt, T. (2026). PhysioNet as a global platform for biomedical research. *Nature Health*. [DOI: 10.1038/s44360-026-00096-z](https://doi.org/10.1038/s44360-026-00096-z).
+
 Os testes unitários do classificador não acessam a rede nem exigem MNE ou scikit-learn:
 
 ```bash

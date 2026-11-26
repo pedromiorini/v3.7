@@ -33,6 +33,16 @@ Uma análise LOSO complementar manteve cada participante inteiro fora do treino 
 
 A análise de 128 Hz é pós-hoc e altera processamento e participantes incluídos, por isso não é comparação causal nem independente. Os intervalos reamostram participantes, mas folds LOSO compartilham participantes de treino; a incerteza de ajuste/modelo não fica inteiramente representada. Os resultados continuam limitados a uma base pública, uma tarefa e um pipeline offline.
 
+## Atribuição e referências
+
+Este material contém informação da [EEG Motor Movement/Imagery Database (EEGMMIDB)](https://www.physionet.org/content/eegmmidb/1.0.0/), disponibilizada sob a [ODC Attribution License v1.0](https://www.physionet.org/content/eegmmidb/view-license/1.0.0/). O aviso identifica a fonte e a licença do banco de dados, mas não resolve eventuais direitos adicionais sobre conteúdos individuais, ressalvados pela própria licença.
+
+Referências solicitadas pelo PhysioNet:
+
+- Schalk, G. (2009). *EEG Motor Movement/Imagery Dataset* (version 1.0.0). PhysioNet. RRID:SCR_007345. [DOI: 10.13026/C28G6P](https://doi.org/10.13026/C28G6P).
+- Schalk, G., McFarland, D.J., Hinterberger, T., Birbaumer, N., & Wolpaw, J.R. (2004). BCI2000: A General-Purpose Brain-Computer Interface (BCI) System. *IEEE Transactions on Biomedical Engineering, 51*(6), 1034–1043. [DOI: 10.1109/TBME.2004.827072](https://doi.org/10.1109/TBME.2004.827072).
+- Pollard, T., Moody, B.E., Lehman, L., Gow, B., Fernandes, C., Xie, C., Johnson, A., Mark, R.G., & Heldt, T. (2026). PhysioNet as a global platform for biomedical research. *Nature Health*. [DOI: 10.1038/s44360-026-00096-z](https://doi.org/10.1038/s44360-026-00096-z).
+
 ## Limites das alegações v4.0
 
 A sessão `v4.0-closed-loop/session_recording.json` não contém metadados de origem e registra `phi_eeg=2.0` em todos os 100 ciclos. Uma série constante não sustenta uma correlação de 0,91. O PDF e o TeX legados, agora em `v4.0-closed-loop/archive/unverified_legacy/`, alegam correlação com EEG humano e “traço de consciência”; esses enunciados não são verificados pelos dados do checkout e não devem ser tratados como resultados experimentais. Uma nota técnica nova, baseada somente no baseline público de imagética motora, está em [PDF](v4.0-closed-loop/diwt_v40_eegbci_baseline.pdf) e [Markdown](v4.0-closed-loop/diwt_v40_eegbci_baseline.md).
