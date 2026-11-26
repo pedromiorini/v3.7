@@ -2,7 +2,7 @@
 
 ## Estado do checkout
 
-Clone `/workspace/diwt-v3.7`, branch `master`, HEAD/base `aab70b638f7b86cbda203032f5dc48fd6fc12702`. A árvore local contém alterações não commitadas; nenhum stage, commit, push ou publicação foi feito. Backups fora do clone: pré-integração real EEG `/workspace/.diwt-v3.7-pre-real-eeg-integration-20261120.tar.gz` (SHA-256 `7f8ee5646029377fe4b0a32f27ddae5859220e48df196ee78024a6044ac22769`) e pré-integração LOSO `/workspace/.diwt-v3.7-pre-loso-integration-20261120.tar.gz` (SHA-256 `995894d86f6a958d98044b193b0f26d039dada8c9b1b3d321d950acdedb289f3`).
+Estado após a auditoria inicial (2026-11-20): clone `/workspace/diwt-v3.7`, branch `master`, base `aab70b638f7b86cbda203032f5dc48fd6fc12702`; a árvore continha alterações locais sem commit, stage, push ou publicação. Backups fora do clone: pré-integração real EEG `/workspace/.diwt-v3.7-pre-real-eeg-integration-20261120.tar.gz` (SHA-256 `7f8ee5646029377fe4b0a32f27ddae5859220e48df196ee78024a6044ac22769`) e pré-integração LOSO `/workspace/.diwt-v3.7-pre-loso-integration-20261120.tar.gz` (SHA-256 `995894d86f6a958d98044b193b0f26d039dada8c9b1b3d321d950acdedb289f3`). O estado atual consta ao fim deste arquivo.
 
 ## Mudanças e evidência
 
@@ -40,7 +40,7 @@ Também passaram `py_compile` dos scripts e testes listados em `AUDIT.md`. Verif
 - A LOSO estima desempenho em participantes retidos dentro da EEGMMIDB e do pipeline fixo; os participantes observados não representam automaticamente outras populações, aparelhos, tarefas ou condições. Folds LOSO compartilham dados de treino, então bootstrap por participante não captura toda a incerteza do ajuste.
 - A análise reamostrada a 128 Hz é secundária/pós-hoc e não independente da estrita. As duas variantes não isolam causalmente o efeito de frequência ou a inclusão de três participantes.
 - `neural_state_mapper.py`/`train_mock_model`, controlador `MockDIWT`, demos e curvas sintéticas continuam sendo simulações explicitamente documentadas.
-- Nenhum commit foi criado; revisar o diff inteiro antes de qualquer commit.
+- Na redação original desta pendência (2026-11-20), nenhum commit havia sido criado; o diff foi revisado antes das publicações registradas abaixo.
 
 
 ## Revalidação delimitada — 2026-11-25
@@ -129,7 +129,7 @@ Não houve nova execução dos experimentos EEG nem edição dos JSONs históric
 
 ## Atribuição EEGMMIDB nos materiais públicos — 2026-11-26
 
-Base verificada: branch `master`, HEAD e `origin/master` em `9262808221dd631f443db441a3e66d5be2bc1a49`. O checkout estava limpo antes desta etapa. Foram alterados localmente `eeg_phase2/README.md`, `ARTICLE.md`, `v4.0-closed-loop/diwt_v40_eegbci_baseline.md`, o PDF gerado correspondente e este registro. Nenhum stage, commit, push ou publicação foi feito.
+Base verificada: branch `master`, HEAD e `origin/master` em `9262808221dd631f443db441a3e66d5be2bc1a49`. O checkout estava limpo antes desta etapa. Foram alterados localmente `eeg_phase2/README.md`, `ARTICLE.md`, `v4.0-closed-loop/diwt_v40_eegbci_baseline.md`, o PDF gerado correspondente e este registro. Naquele momento, antes do commit `073b897`, não houve stage, commit, push ou publicação.
 
 - As três páginas públicas de resultados agora incluem aviso visível, com links, de que contêm informação da [EEGMMIDB no PhysioNet](https://www.physionet.org/content/eegmmidb/1.0.0/) e que a base está disponível sob a [ODC Attribution License v1.0](https://www.physionet.org/content/eegmmidb/view-license/1.0.0/). Cada uma também registra as três citações que o PhysioNet solicita: Schalk (2009), artigo original BCI2000 (Schalk et al., 2004; DOI `10.1109/TBME.2004.827072`) e a citação padrão PhysioNet (Pollard et al., 2026; DOI `10.1038/s44360-026-00096-z`). O artigo original foi conferido no [PubMed](https://pubmed.ncbi.nlm.nih.gov/15188875/); as demais informações constam da página oficial EEGMMIDB.
 - Os textos esclarecem apenas que o aviso identifica fonte/licença do banco de dados e não resolve eventuais direitos adicionais sobre conteúdos individuais, conforme a ressalva da seção 2.4 da licença. Isso não é parecer jurídico. Não foram alteradas alegações científicas, resultados numéricos, código ou dados EEG brutos.
@@ -151,4 +151,8 @@ pdftotext -layout v4.0-closed-loop/diwt_v40_eegbci_baseline.pdf -
 # confirmação de aviso/licença, citações, DOI e ressalva
 ```
 
-Também foram verificados os elementos de atribuição e referências nos três Markdown e a extração textual do PDF. A comparação da extração antes/depois confirmou idênticas as quatro linhas numéricas: run 4 `0,7857 / 0,8000`; run 8 `0,4732 / 0,4667`; run 12 `0,6161 / 0,6000`; agregado `0,6196 / 0,6222` com matriz `[[17, 6], [11, 11]]`. Nenhum dado bruto foi incluído. A suíte pulou um teste porque MNE não está instalado no ambiente base; não houve nova execução do experimento nem validação de direitos além do texto oficial da licença. O trabalho permanece local e sem commit ou publicação.
+Também foram verificados os elementos de atribuição e referências nos três Markdown e a extração textual do PDF. A comparação da extração antes/depois confirmou idênticas as quatro linhas numéricas: run 4 `0,7857 / 0,8000`; run 8 `0,4732 / 0,4667`; run 12 `0,6161 / 0,6000`; agregado `0,6196 / 0,6222` com matriz `[[17, 6], [11, 11]]`. Nenhum dado bruto foi incluído. A suíte pulou um teste porque MNE não está instalado no ambiente base; não houve nova execução do experimento nem validação de direitos além do texto oficial da licença. O estado ao final daquela etapa era local, sem commit ou publicação.
+
+## Estado atual após publicação — 2026-11-26
+
+O commit de atribuição `073b897075635ececfd98c8f378b1098ba294250` está publicado em `master`; `HEAD` e `origin/master` coincidem nesse SHA e a árvore de trabalho estava limpa na checagem. A revisão independente confirmou as três citações e os DOIs contra as fontes oficiais, o alcance do aviso ODC-By §§2.4/4.3 e a preservação das métricas no PDF. Não encontrou erro material e não reexecutou o experimento.

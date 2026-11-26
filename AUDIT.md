@@ -2,7 +2,7 @@
 
 Data da revisão: 2026-11-20
 Checkout: `master`, base `aab70b638f7b86cbda203032f5dc48fd6fc12702`
-Estado final: alterações locais não commitadas; nenhum push, publicação, dado EEG bruto ou EDF foi colocado no repositório.
+Estado ao fim da auditoria inicial (2026-11-20): alterações locais não commitadas; nenhum push ou publicação tinha sido feito. O estado atual está registrado ao fim deste relatório.
 
 ## Prompt de execução refinado
 
@@ -73,7 +73,7 @@ Os resultados atuais da suíte estão acima: 57 testes passaram no ambiente com 
 - O classificador guarda hashes EDF, mas não baixa dados brutos para Git. A análise pode requerer internet no primeiro uso.
 - `MockDIWT`, `neural_state_mapper.py` (`train_mock_model`), o replay e curvas sintéticas permanecem protótipos; foram rotulados, não “convertidos” em fenômenos observados.
 - Os arquivos em `v4.0-closed-loop/archive/unverified_legacy/` ainda contêm as afirmações não verificadas; eles foram preservados para histórico e não devem ser distribuídos como evidência. A nota nova é um relatório técnico limitado, não artigo revisado por pares.
-- Nenhum commit foi criado. O branch local ativo é `master` e não houve mudança remota.
+- Na redação inicial deste relatório, nenhum commit havia sido criado e não havia mudança remota; veja o status atual abaixo.
 
 
 ## Revalidação delimitada dos quatro achados — 2026-11-25
@@ -87,3 +87,7 @@ Base revalidada: `master`, `aab70b638f7b86cbda203032f5dc48fd6fc12702`; `origin/m
 4. **P3 — CONFIRMADO → DOCUMENTADO, JSONs preservados (alta confiança):** ambos os resultados LOSO históricos registram `execution.repository.branch` como `""`, impossibilitando identificar a branch a partir do JSON. O `eeg_phase2/README.md` agora explicita essa limitação. Nenhum resultado foi regenerado ou editado. Os SHA-256 observados antes das mudanças foram `e5938da1c2d90a4fe7c56d0994cb2b2d9f6887a31d577a389112cb779c5b5d90` (estrito) e `096e7a93dac39cfd5206bbd624d7d71c1919e32b281c6302136c9d7f40aa8aa6` (128 Hz); a verificação final deve mantê-los iguais.
 
 **Validação desta etapa:** os três testes novos falharam antes das correções e passaram depois. `PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider` passou com 59 testes e 1 skip; o skip é o teste que exige MNE, não instalado no Python base. `py_compile` passou para os quatro arquivos novos/alterados de código e teste. A renderização real de `v4.0-closed-loop/diwt_v40_eegbci_baseline.md` produziu um PDF de 2 páginas A4, versão 1.7, em `/tmp`, que foi removido após a verificação. A execução real do treino do mapper não foi testada porque PyTorch não está instalado; não foi baixado EEG nem reexecutado baseline/LOSO. Nenhum commit, push, merge ou publicação foi feito.
+
+## Estado atual após publicação — 2026-11-26
+
+O commit de atribuição `073b897075635ececfd98c8f378b1098ba294250` está publicado em `master`; `HEAD` e `origin/master` coincidem nesse SHA e a árvore de trabalho está limpa. Esse registro substitui qualquer status de “sem commit/publicação” nas seções históricas anteriores.
